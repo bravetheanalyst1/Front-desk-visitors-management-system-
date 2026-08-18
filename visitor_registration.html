@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visitor Management System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Visitor Registration</h1>
+    <div class="quick-mode-toggle" id="quickModeToggle">
+      <span id="quickModeLabel" style="font-size: 14px; color: var(--text-secondary, #666);">Quick Mode (Dispatch)</span>
+      <div class="toggle-switch" id="quickModeSwitch"></div>
+    </div>
+  </div>
+
+  <div class="success-message" id="successMessage">
+    ✓ Visitor registered successfully!
+  </div>
+
+  <form id="visitorForm">
+    <div class="form-container">
+      <div class="form-section">
+        <div class="section-title">
+          Visitor Information
+        </div>
+        
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" required placeholder="+234 901 234 5678">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="visitor@example.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="company">Company/Organization</label>
+          <input type="text" id="company" name="company" placeholder="ABC Company">
+        </div>
+
+        <div class="form-group hidden" id="idGroup">
+          <label for="idType">ID Type</label>
+          <select id="idType" name="idType">
+            <option value="">Select ID type</option>
+            <option value="passport">Passport</option>
+            <option value="drivers_license">Driver's License</option>
+            <option value="national_id">National ID</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">
+           Visit Details
+        </div>
+
+        <div class="form-group">
+          <label for="hostName">Visiting Person/Department <span class="required">*</span></label>
+          <input type="text" id="hostName" name="hostName" required placeholder="e.g., John Smith or HR Department">
+        </div>
+
+        <div class="form-group">
+          <label for="department">Department <span class="required">*</span></label>
+          <select id="department" name="department" required>
+            <option value="">Select department</option>
+            <option value="sales">Sales</option>
+            <option value="hr">Human Resources</option>
+            <option value="it">IT</option>
+            <option value="finance">Finance</option>
+            <option value="operations">Operations</option>
+            <option value="marketing">Marketing</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="visitPurpose">Purpose of Visit <span class="required">*</span></label>
+          <input type="text" id="visitPurpose" name="visitPurpose" required placeholder="Meeting, Delivery, Interview, etc.">
+        </div>
+
+        <div class="form-group hidden" id="appointmentGroup">
+          <label for="appointmentTime">Appointment Time</label>
+          <input type="time" id="appointmentTime" name="appointmentTime">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="form-section full-width">
+        <div class="section-title">
+          Visit Duration
+        </div>
+
+        <div class="time-row">
+          <div class="form-group">
+            <label for="checkInDate">Check-in Date <span class="required">*</span></label>
+            <input type="date" id="checkInDate" name="checkInDate" required>
+          </div>
+          <div class="form-group">
+            <label for="checkInTime">Check-in Time <span class="required">*</span></label>
+            <input type="time" id="checkInTime" name="checkInTime" required>
+          </div>
+        </div>
+
+        <div class="time-row hidden" id="checkOutGroup">
+          <div class="form-group">
+            <label for="checkOutDate">Check-out Date</label>
+            <input type="date" id="checkOutDate" name="checkOutDate">
+          </div>
+          <div class="form-group">
+            <label for="checkOutTime">Check-out Time</label>
+            <input type="time" id="checkOutTime" name="checkOutTime">
+          </div>
+        </div>
+
+        <p class="info-text">Check-out time will be recorded automatically when visitor leaves</p>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="form-section full-width">
+        <div class="section-title">
+           Items Brought Into Building
+        </div>
+
+        <div class="form-group">
+          <label for="itemInput">Add Item</label>
+          <div class="item-input-group">
+            <input type="text" id="itemInput" placeholder="e.g., Laptop, Documents, Equipment">
+            <button type="button" class="btn btn-primary btn-small" id="addItemBtn">Add</button>
+          </div>
+        </div>
+
+        <div id="itemsList" class="item-list"></div>
+        <div class="info-text">Leave empty if no items brought</div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="form-section full-width">
+        <div class="section-title">
+          <span>📝</span> Additional Information
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Special Notes or Instructions</label>
+          <textarea id="notes" name="notes" rows="3" placeholder="Any additional information about the visit..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" style="margin-right: 8px; width: auto;">
+            <span style="font-size: 14px;">I agree to follow company security policies and guidelines</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions" id="formActions">
+      <button type="submit" class="btn btn-primary" id="submitBtn">Register Visitor</button>
+      <button type="reset" class="btn">Clear Form</button>
+    </div>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById('visitorForm');
+const quickModeToggle = document.getElementById('quickModeToggle');
+const quickModeSwitch = document.getElementById('quickModeSwitch');
+const quickModeLabel = document.getElementById('quickModeLabel');
+const successMessage = document.getElementById('successMessage');
+const addItemBtn = document.getElementById('addItemBtn');
+const itemInput = document.getElementById('itemInput');
+const itemsList = document.getElementById('itemsList');
+const submitBtn = document.getElementById('submitBtn');
+
+let items = [];
+let isQuickMode = false;
+
+// Set today's date as default check-in date
+document.getElementById('checkInDate').valueAsDate = new Date();
+
+// Quick Mode Toggle
+quickModeToggle.addEventListener('click', () => {
+  isQuickMode = !isQuickMode;
+  quickModeSwitch.classList.toggle('active');
+  updateFormForQuickMode();
+});
+
+function updateFormForQuickMode() {
+  const hiddenGroups = [
+    'idGroup',
+    'idNumberGroup',
+    'appointmentGroup',
+    'checkOutGroup'
+  ];
+
+  const formFields = ['email', 'company', 'idType', 'idNumber', 'appointmentTime', 'checkOutDate', 'checkOutTime', 'notes', 'agreeTerms'];
+
+  if (isQuickMode) {
+    quickModeLabel.textContent = 'Quick Mode (On)';
+    hiddenGroups.forEach(id => document.getElementById(id).classList.add('hidden'));
+    submitBtn.textContent = 'Quick Register';
+    
+    // Clear optional fields
+    formFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.type !== 'checkbox') el.value = '';
+    });
+    document.getElementById('agreeTerms').checked = false;
+  } else {
+    quickModeLabel.textContent = 'Quick Mode (Dispatch)';
+    hiddenGroups.forEach(id => document.getElementById(id).classList.remove('hidden'));
+    submitBtn.textContent = 'Register Visitor';
+  }
+}
+
+// Add Item
+addItemBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  const itemValue = itemInput.value.trim();
+  
+  if (itemValue) {
+    items.push(itemValue);
+    itemInput.value = '';
+    renderItems();
+    itemInput.focus();
+  }
+});
+
+// Allow Enter key to add item
+itemInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    addItemBtn.click();
+  }
+});
+
+function renderItems() {
+  itemsList.innerHTML = items.map((item, index) => `
+    <div class="item-tag">
+      <span>${item}</span>
+      <button type="button" class="btn btn-danger btn-small" onclick="removeItem(${index})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function removeItem(index) {
+  items.splice(index, 1);
+  renderItems();
+}
+
+// Form Submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  if (!isQuickMode && !document.getElementById('agreeTerms').checked) {
+    alert('Please agree to the terms and conditions');
+    return;
+  }
+
+  const formData = {
+    fullName: document.getElementById('fullName').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value,
+    company: document.getElementById('company').value,
+    idType: document.getElementById('idType').value,
+    idNumber: document.getElementById('idNumber').value,
+    hostName: document.getElementById('hostName').value,
+    department: document.getElementById('department').value,
+    visitPurpose: document.getElementById('visitPurpose').value,
+    appointmentTime: document.getElementById('appointmentTime').value,
+    checkInDate: document.getElementById('checkInDate').value,
+    checkInTime: document.getElementById('checkInTime').value,
+    checkOutDate: document.getElementById('checkOutDate').value,
+    checkOutTime: document.getElementById('checkOutTime').value,
+    items: items,
+    notes: document.getElementById('notes').value,
+    registeredAt: new Date().toISOString(),
+    isQuickMode: isQuickMode
+  };
+
+  // Save to localStorage (for now)
+  const visitors = JSON.parse(localStorage.getItem('visitors') || '[]');
+  visitors.push(formData);
+  localStorage.setItem('visitors', JSON.stringify(visitors));
+
+  // Show success message
+  successMessage.classList.add('show');
+  setTimeout(() => successMessage.classList.remove('show'), 4000);
+
+  // Reset form
+  form.reset();
+  items = [];
+  renderItems();
+  document.getElementById('checkInDate').valueAsDate = new Date();
+
+  console.log('Registration Data:', formData);
+  alert('Visitor registered successfully!');
+});
+
+// Initialize
+updateFormForQuickMode();
+</script>
+
+</body>
+</html>
